@@ -53,6 +53,6 @@ def augmentProb(baseRate, student):
     :return: int: updated infection probability based on given factors
     '''
 
-    augRate = baseRate*((np.sqrt(1.5))**(student.grade-9)) #9 being the youngest grade
+    augRate = baseRate*(.25*(student.grade-9)) #9 being the youngest grade
     augRate = augRate*(1+(not student.health)*.7)
     return augRate
