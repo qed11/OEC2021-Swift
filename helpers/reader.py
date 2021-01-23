@@ -3,6 +3,9 @@ import numpy as np
 from people import Person
 
 def getDic(filename:str):
+    '''
+
+    '''
     #big dictionary holding all information
     person_class = dict()
     
@@ -21,9 +24,9 @@ def getDic(filename:str):
         #extracurricular
         ext = extra(str(i[9]))
         #health
-        health = 0
-        if np.isnan(i[8]) == False:
-            health = 1
+        health = False
+        if isinstance(i[8],str) == True:
+            health = True
         #creating individual element
         for j in inf:
             if j[0] == i[0] and j[1] == i[1] and j[2] == i[2]:
@@ -36,13 +39,13 @@ def getDic(filename:str):
         person_dict['p3'] = i[6]
         person_dict['p4'] = i[7]
         person_dict['ident'] = key
-        person_dict['heatlh'] = health
+        person_dict['health'] = health
         person_dict['excur'] = ext
         person = Person.from_dict(person_dict)
         #print(key)
         person_class[key] = person
 
-    
+    #===========================================================================
     #teachers
     t = pd.read_excel(filename,sheet_name = 'Teacher Records').to_numpy()
     for i in t:
@@ -62,6 +65,7 @@ def getDic(filename:str):
         #print(key)
         person_class[key] = person
     
+    #========================================================================================
     #TAs
     ta = pd.read_excel(filename, sheet_name = 'Teaching Assistant Records').to_numpy()
     #print(ta)
@@ -88,10 +92,8 @@ def getDic(filename:str):
     return person_class
 
 def extra(el):
-    #no extracurricular
-    if el == np.nan:
+    if el == 'nan':
         return []
-    
     if ',' in el:
         #multiple extracurricular
         return el.split(',')
@@ -99,20 +101,19 @@ def extra(el):
         #one extracurricular
         return [el]
 
-"""
+
 if __name__=='__main__':
     p_class = getDic('OEC2021 - School Record Book .xlsx')
-    '''
-    print(p_class['S-580'].l_name)
-    print(p_class['S-580'].f_name)
-    print(p_class['S-580'].ident)
-    print(p_class['S-580'].infected)
-    print(p_class['S-580'].excur)
-    print(p_class['S-580'].p1)
-    print(p_class['S-580'].p2)
-    print(p_class['S-580'].p3)
-    print(p_class['S-580'].p4)
-    print(p_class['S-580'].health)    
-    print(p_class['S-580'].grade)
-    '''
-"""
+    
+    print(p_class['S-566'].l_name)
+    print(p_class['S-566'].f_name)
+    print(p_class['S-566'].ident)
+    print(p_class['S-566'].infected)
+    print(p_class['S-566'].excur)
+    print(p_class['S-566'].p1)
+    print(p_class['S-566'].p2)
+    print(p_class['S-566'].p3)
+    print(p_class['S-566'].p4)
+    print(p_class['S-566'].health)    
+    print(p_class['S-566'].grade)
+    
