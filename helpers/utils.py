@@ -57,7 +57,7 @@ def generateLunchgroups(infoDict, infectedList, groupSize=10, currGradeChance=0.
 
         # initalize a lunch group
         tempLg = [currPerson.ident]
-        for i in range(groupSize-1)
+        for i in range(groupSize-1):
             if np.random.random() < currGradeChance: # if same grade
                 newPersonId = gradeDict[currPerson.grade].pop(random.randrange(len(gradeDict[currPerson.grade])))
                 if newPersonId == currPerson.ident: # if picked the same person as current person, choose a new one
@@ -81,3 +81,17 @@ def generateLunchgroups(infoDict, infectedList, groupSize=10, currGradeChance=0.
         lunchGroups.append(tempLg)
     
     return lunchGroups
+
+def getSiblingDict(person_class:dict):
+    sib = dict()
+    for el in person_class:
+        if person_class[el].l_name not in sib:
+            sib[person_class[el].l_name] = [el]
+        else:
+            sib[person_class[el].l_name].append(el)
+    
+    for family in list(sib):
+        if len(sib[family]) == 1:
+            del sib[family]
+    
+    return sib

@@ -1,6 +1,5 @@
 import numpy as np
-from .utils import getGradedict, generateLunchgroups, getExcurDict
-
+from .utils import getGradedict, generateLunchgroups, getExcurDict,getSiblingDict
 def infectPeriod(infoDict, classrooms, infectedList, baseRate, baseEnvRate):
 
     '''
@@ -195,13 +194,36 @@ def infectExcur(infoDict, infectedList, baseRate):
 
 def augmentProb(baseRate, student):
 
-    '''
-
+    """
     :param baseRate: base rate of infection
     :param student: Individual to be infected
     :return: int: updated infection probability based on given factors
-    '''
+    """
 
     augRate = baseRate*(.25*(student.grade-9)) #9 being the youngest grade
     augRate = augRate*(1+(not student.health)*.7)
     return augRate
+
+def infectSiblings(infoDict,infectedList,baseRate):
+    
+    siblingDict = getSiblingDict(infoDict)
+    toInfect = set()
+    newlyInfected = 0
+
+     # iterate through all sibling groups
+    for lName, peopleList in siblingDict:
+        for infected_id in peopleList:
+            # find infected people in each family
+            if infected_id in infectedList:
+                for student in peopleList:
+                    # infect non infected people based on chance
+                    if student not in infectedList:
+                        randomSample = np.random.random()
+                        infectProb = augmentProb(baseRate, infoDict[student])
+                        if randomSample < infectProb:
+                            toInfect.add(student)
+    
+    toInfect = list(toInfect)
+    newlyInfected += len(toInfect)
+    
+    return toInfect, newlyInfected/len(infectedList)
