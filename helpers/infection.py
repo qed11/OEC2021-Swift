@@ -1,4 +1,5 @@
 import numpy as np
+from .utils import getGradedict, generateLunchgroups, getExcurDict
 
 def infectPeriod(infoDict, classrooms, infectedList, baseRate, baseEnvRate):
 
@@ -124,6 +125,75 @@ def lunchTransition(infoDict, infectedList, baseRate):
 
     return toInfect, newlyInfected / len(infectedList)
 
+def infectLunch(infoDict, infectedList, baseRate):
+
+    '''
+    Method that updates infoDict with newly infected students - intended to be used every period
+
+    :param infoDict: Dictionary with student ids as keys, and Person class as associated values
+    :param infectedList: List of student ids pertaining to known infectious students
+    :param baseRate: Base rate at which an infected individual will infect others
+
+    :return list: List of student ids that represent students newly infected this period
+    :return int: Total number of newly infected individuals over total number of infected individuals at period start
+    '''
+
+    lunchGroups = generateLunchgroups(infoDict, infectedList, groupSize=10)
+
+    for lunchGroup in lunchGroups:
+
+        # A set is used to prevent redundant entries
+        toInfect = {}
+        for infectedId in lunchGroup:
+            if infoDict[infectedId].infected:
+                for studentId in lunchGroup:
+                    if infoDict[studentId].infected == False:
+                        randomSample = np.random.random()
+                        infectProb = augmentProb(baseRate, infoDict[studentId])
+                        if randomSample < infectProb:
+                            toInfect.add(studentId)
+
+        toInfect = list(toInfect)
+        newlyInfected += len(toInfect)
+
+        # Update list of people to be infected next period
+        nextPeriod.extend(toInfect)
+
+    return nextPeriod, newlyInfected/len(infectedList)
+
+def infectExcur(infoDict, infectedList, baseRate):
+    '''
+    Method that returns a list of infected students from extracurriculars
+
+    :param infoDict: Dictionary with student ids as keys, and Person class as associated values
+    :param infectedList: List of student ids pertaining to known infectious students
+    :param baseRate: Base rate at which an infected individual will infect others
+
+    :return list: List of student ids that represent students newly infected this period
+    :return int: Total number of newly infected individuals over total number of infected individuals at period start
+    '''
+
+    excurDict = getExcurDict(infoDict)
+
+    toInfect = set()
+
+    # iterate through all extracurricular groups
+    for excurName, peopleList in excurDict:
+        for infected_id in peopleList:
+            # find infected people in each group
+            if infected_id in infectedList:
+                for student in peopleList:
+                    # infect non infected people based on chance
+                    if student not in infectedList:
+                        randomSample = np.random.random()
+                        infectProb = augmentProb(baseRate, infoDict[student])
+                        if randomSample < infectProb:
+                            toInfect.add(student)
+    
+    toInfect = list(toInfect)
+    newlyInfected += len(toInfect)
+    
+    return toInfect, newlyInfected/len(infectedList)
 
 def augmentProb(baseRate, student):
 
