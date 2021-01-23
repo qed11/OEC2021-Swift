@@ -12,10 +12,13 @@ def infectPeriod(infoDict, classrooms, infectedList, baseRate, baseEnvRate):
     :param baseEnvRate: Infection rate of environment per infectious individual
     :param baseRate: Base rate at which an infected individual will infect others
 
+    :return list: List of student ids that represent students newly infected this period
     :return int: Total number of newly infected individuals over total number of infected individuals at period start
     '''
 
     newlyInfected = 0
+    nextPeriod = []
+
     for classroom in classrooms:
 
         # A set is used to prevent redundant entries
@@ -41,16 +44,11 @@ def infectPeriod(infoDict, classrooms, infectedList, baseRate, baseEnvRate):
 
         toInfect = list(toInfect)
         newlyInfected += len(toInfect)
-        for person in toInfect:
-            # Update information dictionary
-            infoDict[person].infected = True
 
-        # Update list of infected in classroom
-        classroom.infectedList = classroom.infectedList.extend(toInfect)
-        # Update total list of infected persons
-        infectedList.extend(toInfect)
+        # Update list of people to be infected next period
+        nextPeriod.extend(toInfect)
 
-    return newlyInfected/len(infectedList)
+    return nextPeriod, newlyInfected/len(infectedList)
 
 def augmentProb(baseRate, student):
 
