@@ -1,4 +1,4 @@
-from helpers.infection import infectPeriod, infectTransition, lunchTransition, infectLunch, infectExcur
+from helpers.infection import infectPeriod, infectTransition, lunchTransition, infectLunch, infectExcur, infectSiblings
 from helpers.group import updateClassrooms, resetEnvRate
 from helpers.reader import getDic
 import copy
@@ -110,6 +110,11 @@ def main():
         for student_id in toInfect:
             infoDict[student_id].infected = True
         toInfect = excurInfect
+
+        siblingInfect, siblingR = infectSiblings(infoDict, infectedList, baseRate)
+        average_R += siblingR
+
+        toInfect += siblingInfect
 
         # After getting home
         infectedList.extend(toInfect)

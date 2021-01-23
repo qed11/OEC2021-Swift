@@ -213,7 +213,7 @@ def infectSiblings(infoDict,infectedList,baseRate):
     newlyInfected = 0
 
      # iterate through all sibling groups
-    for lName, peopleList in siblingDict:
+    for lName, peopleList in siblingDict.items():
         for infected_id in peopleList:
             # find infected people in each family
             if infected_id in infectedList:

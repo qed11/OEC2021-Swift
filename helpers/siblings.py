@@ -19,7 +19,7 @@ def infectSiblings(infoDict,infectedList,baseRate):
     siblingDict = getSiblingDict(infoDict)
 
      # iterate through all extracurricular groups
-    for excurName, peopleList in siblingDict:
+    for excurName, peopleList in siblingDict.items():
         for infected_id in peopleList:
             # find infected people in each group
             if infected_id in infectedList:
