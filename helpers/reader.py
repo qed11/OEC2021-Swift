@@ -123,8 +123,9 @@ def extra(el):
 
 if __name__=='__main__':
     p_class = getDic('OEC2021 - School Record Book .xlsx')
+    
+    print(p_class['TA-6'].infected)
     '''
-    print(p_class['S-566'].l_name)
     print(p_class['S-566'].f_name)
     print(p_class['S-566'].ident)
     print(p_class['S-566'].infected)
