@@ -41,6 +41,6 @@ class Person():
             person_dict["p4"] = person_dict["p1"]
             # for teachers, distributes p1 to all periods
 
-        return cls.__init__(person_dict["l_name"], person_dict["f_name"], person_dict["grade"], 
-                            person_dict["p1"], person_dict["p2"], person_dict["p3"], person_dict["p4"],
-                            person_dict["excur"], person_dict["ident"], person_dict["infected"])
+        return cls(person_dict["l_name"], person_dict["f_name"], person_dict["grade"], 
+                    person_dict["p1"], person_dict["p2"], person_dict["p3"], person_dict["p4"], 
+                    person_dict['health'], person_dict["excur"], person_dict["ident"], person_dict["infected"])
