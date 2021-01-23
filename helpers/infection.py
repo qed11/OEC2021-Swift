@@ -143,7 +143,7 @@ def infectLunch(infoDict, infectedList, baseRate):
     for lunchGroup in lunchGroups:
 
         # A set is used to prevent redundant entries
-        toInfect = {}
+        toInfect = set()
         for infectedId in lunchGroup:
             if infoDict[infectedId].infected:
                 for studentId in lunchGroup:
@@ -156,10 +156,7 @@ def infectLunch(infoDict, infectedList, baseRate):
         toInfect = list(toInfect)
         newlyInfected += len(toInfect)
 
-        # Update list of people to be infected next period
-        nextPeriod.extend(toInfect)
-
-    return nextPeriod, newlyInfected/len(infectedList)
+    return toInfect, newlyInfected/len(infectedList)
 
 def infectExcur(infoDict, infectedList, baseRate):
     '''
