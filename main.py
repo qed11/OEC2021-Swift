@@ -1,10 +1,15 @@
 from helpers.infection import infectPeriod, infectTransition, lunchTransition, infectLunch, infectExcur
 from helpers.group import updateClassrooms
+from helpers.reader import getDic
 
 def main():
 
-    infoDict = None
-    infectedList = None
+    infoDict = getDic('OEC2021 - School Record Book .xlsx')
+    infectedList = []
+
+    for student_id in infoDict.keys():
+        if infoDict[student_id].infected:
+            infectedList.append(student_id)
     classrooms = None
     baseRate = 0.01
     baseEnvRate = 0.001

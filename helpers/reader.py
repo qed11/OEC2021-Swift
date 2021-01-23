@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from people import Person
+from .people import Person
 
 def getDic(filename:str):
     '''
