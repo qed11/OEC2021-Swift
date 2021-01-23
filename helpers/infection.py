@@ -139,6 +139,7 @@ def infectLunch(infoDict, infectedList, baseRate):
     '''
 
     lunchGroups = generateLunchgroups(infoDict, infectedList, groupSize=10)
+    newlyInfected = 0
 
     for lunchGroup in lunchGroups:
 
@@ -171,8 +172,8 @@ def infectExcur(infoDict, infectedList, baseRate):
     '''
 
     excurDict = getExcurDict(infoDict)
-
     toInfect = set()
+    newlyInfected = 0
 
     # iterate through all extracurricular groups
     for excurName, peopleList in excurDict:
