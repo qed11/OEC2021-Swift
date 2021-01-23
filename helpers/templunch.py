@@ -62,6 +62,51 @@ def generateLunchgroups(infoDict, infectedList, groupSize=10, currGradeChance=0.
     
     return lunchGroups
 
-def 
+def infectLunch(infoDict, infectedList, baseRate):
 
+    '''
+    Method that updates infoDict with newly infected students - intended to be used every period
 
+    :param infoDict: Dictionary with student ids as keys, and Person class as associated values
+    :param infectedList: List of student ids pertaining to known infectious students
+    :param baseRate: Base rate at which an infected individual will infect others
+
+    :return list: List of student ids that represent students newly infected this period
+    :return int: Total number of newly infected individuals over total number of infected individuals at period start
+    '''
+
+    lunchGroups = generateLunchgroups(infoDict, infectedList, groupSize=10)
+
+    for lunchGroup in lunchGroups:
+
+        # A set is used to prevent redundant entries
+        toInfect = {}
+        for infectedId in lunchGroup:
+            if infoDict[infectedId].infected:
+                for studentId in lunchGroup:
+                    if infoDict[studentId].infected == False:
+                        randomSample = np.random.random()
+                        infectProb = augmentProb(baseRate, infoDict[studentId])
+                        if randomSample < infectProb:
+                            toInfect.add(studentId)
+
+        toInfect = list(toInfect)
+        newlyInfected += len(toInfect)
+
+        # Update list of people to be infected next period
+        nextPeriod.extend(toInfect)
+
+    return nextPeriod, newlyInfected/len(infectedList)
+
+def augmentProb(baseRate, student):
+
+    '''
+
+    :param baseRate: base rate of infection
+    :param student: Individual to be infected
+    :return: int: updated infection probability based on given factors
+    '''
+
+    augRate = baseRate*(.25*(student.grade-9)) #9 being the youngest grade
+    augRate = augRate*(1+(not student.health)*.7)
+    return augRate
