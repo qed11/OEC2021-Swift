@@ -21,8 +21,8 @@ class Classroom:
         self.lastPeriod = lastPeriod
         self.currentPeriod = currentPeriod
         self.baseEnvRate = baseEnvRate
-        self.infectedList = None
-        self.lastInfected = None
+        self.infectedList = []
+        self.lastInfected = []
 
 def updateClassrooms(classrooms, info_dict, period):
     '''
@@ -42,13 +42,13 @@ def updateClassrooms(classrooms, info_dict, period):
             for letter in ['A', 'B']:
                 in_class = []
                 classroom_name = name+' '+letter
-                classrooms[classroom_name] = Classroom([], None, 0)
+                classrooms[classroom_name] = Classroom(None, [], 0)
                 # No last period for the first period
 
-            for student_id in info_dict.keys():
-                classrooms[info_dict[student_id].p1].currentPeriod.append(student_id)
-                if info_dict[student_id].infected:
-                    classrooms[info_dict[student_id].p1].infectedList.append(student_id)
+        for student_id in info_dict.keys():
+            classrooms[info_dict[student_id].p1].currentPeriod.append(student_id)
+            if info_dict[student_id].infected:
+                classrooms[info_dict[student_id].p1].infectedList.append(student_id)
 
     else:
         for name in classrooms.keys():
@@ -64,3 +64,5 @@ def updateClassrooms(classrooms, info_dict, period):
             if info_dict[student_id].infected:
                 classrooms[student_periods[period-1]].infectedList.append(student_id)
                 classrooms[student_periods[period-2]].infectedList.append(student_id)
+
+    return classrooms

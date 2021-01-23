@@ -6,7 +6,7 @@ def getGradedict(infoDict):
     # look down for the format of dictionary
     gradedict = {9: [], 10: [], 11: [], 12: [], "other": []}
 
-    for ident, person in infoDict:
+    for ident, person in infoDict.items():
         if person.grade not in gradedict:
             gradedict["other"].append(ident)
         else:
@@ -24,7 +24,7 @@ def getExcurDict(infoDict):
     :return dict: dictionary of {"excur_tag": [idents, ]}
     '''
     excurDict = {}
-    for ident, person in infoDict:
+    for ident, person in infoDict.items():
         if person.excur:
             try:
                 excurDict[person.excur[0]].append(ident)
@@ -54,7 +54,8 @@ def generateLunchgroups(infoDict, infectedList, groupSize=10, currGradeChance=0.
     # pops infected people from infected list, and generates a lunch group of a certain size with them in it
     while infList:
         currPerson = infoDict[infList.pop()]
-
+        if currPerson.grade > 12:
+            continue
         # initalize a lunch group
         tempLg = [currPerson.ident]
         for i in range(groupSize-1):
@@ -65,18 +66,22 @@ def generateLunchgroups(infoDict, infectedList, groupSize=10, currGradeChance=0.
                 
                 try: # remove from infected list if we chose another infected person
                     infList.remove(newPersonId)
+                except:
+                    pass
 
                 tempLg.append(newPersonId)
             else: # different grade
-                grades.remove(currPerson.ident)
+                grades.remove(currPerson.grade)
 
                 randomGrade = grades[random.randrange(len(grades))]
                 newPersonId = gradeDict[randomGrade].pop(random.randrange(len(gradeDict[randomGrade])))
 
                 try: # remove from infected list if we chose another infected person
                     infList.remove(newPersonId)
+                except:
+                    pass
 
-                grades.append(currPerson.ident)
+                grades.append(currPerson.grade)
         
         lunchGroups.append(tempLg)
     

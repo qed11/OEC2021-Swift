@@ -18,11 +18,12 @@ def infectPeriod(infoDict, classrooms, infectedList, baseRate, baseEnvRate):
     newlyInfected = 0
     nextPeriod = []
 
-    for classroom in classrooms:
+    for class_name in classrooms.keys():
 
+        classroom = classrooms[class_name]
         # A set is used to prevent redundant entries
-        toInfect = {}
-        for infected in classroom.infectedList:
+        toInfect = set()
+        for _ in classroom.infectedList:
             for student in classroom.currentPeriod:
                 if student not in classroom.infectedList:
                     randomSample = np.random.random()
@@ -67,10 +68,11 @@ def infectTransition(infoDict, classrooms, infectedList, baseRate):
     newlyInfected = 0
     nextPeriod = []
 
-    for classroom in classrooms:
+    for class_name in classrooms.keys():
 
+        classroom = classrooms[class_name]
         # A set is used to prevent redundant entries
-        toInfect = {}
+        toInfect = set()
         for _ in classroom.infectedList:
             for student in classroom.lastPeriod:
                 if student not in classroom.lastInfected:
@@ -109,7 +111,7 @@ def lunchTransition(infoDict, infectedList, baseRate):
     '''
 
     newlyInfected = 0
-    toInfect = {}
+    toInfect = set()
 
     for infected in infectedList:
         for student in infoDict.keys():
@@ -175,7 +177,7 @@ def infectExcur(infoDict, infectedList, baseRate):
     newlyInfected = 0
 
     # iterate through all extracurricular groups
-    for excurName, peopleList in excurDict:
+    for excurName, peopleList in excurDict.items():
         for infected_id in peopleList:
             # find infected people in each group
             if infected_id in infectedList:
