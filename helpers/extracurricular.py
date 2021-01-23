@@ -43,7 +43,7 @@ def infectExcur(infoDict, infectedList, baseRate):
                 for student in peopleList:
                     # infect non infected people based on chance
                     if student not in infectedList:
-                        randomSample = random.uniform(0, 1)
+                        randomSample = np.random.random()
                         infectProb = augmentProb(baseRate, infoDict[student])
                         if randomSample < infectProb:
                             toInfect.add(student)
