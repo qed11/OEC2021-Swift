@@ -1,7 +1,7 @@
 import numpy as np
 import random
 
-def get_gradedict(infoDict):
+def getGradedict(infoDict):
     # function for getting a dictionary of list of idents from the infoDict
     # look down for the format of dictionary
     gradedict = {9: [], 10: [], 11: [], 12: [], "other": []}
@@ -14,53 +14,54 @@ def get_gradedict(infoDict):
     
     return gradedict
 
-def generate_lunchgroups(infoDict, infectedList, group_size=10, curr_grade_chance=0.90):
+def generateLunchgroups(infoDict, infectedList, groupSize=10, currGradeChance=0.90):
     '''
     :param infoDict: Dictionary with student ids as keys, and Person class as associated values
     :param infectedList: List of student ids pertaining to known infectious students
-    :param group_size: Size of each lunch group
-    :param curr_grade_chance: Chance of a student hanging out with their own grade
+    :param groupSize: Size of each lunch group
+    :param currGradeChance: Chance of a student hanging out with their own grade
     '''
     # generate lunch groups with at least 1 infected person in them
 
     grades = [9, 10, 11, 12]
 
-    lunch_groups = []
+    lunchGroups = []
 
-    gradedict = get_gradedict(infoDict)
+    gradeDict = getGradedict(infoDict)
 
     infList = infectedList.copy()
 
     # pops infected people from infected list, and generates a lunch group of a certain size with them in it
     while infList:
-        curr_person = infoDict[infList.pop()]
+        currPerson = infoDict[infList.pop()]
 
         # initalize a lunch group
-        temp_lg = [curr_person.ident]
-        for i in range(group_size-1)
-            if np.random.random() < curr_grade_chance: # if same grade
-                new_person_id = gradedict[curr_person.grade].pop(random.randrange(len(gradedict[curr_person.grade])))
-                if new_person_id == curr_person.ident: # if picked the same person as current person, choose a new one
-                    new_person_id = gradedict[curr_person.grade].pop(random.randrange(len(gradedict[curr_person.grade])))
+        tempLg = [currPerson.ident]
+        for i in range(groupSize-1)
+            if np.random.random() < currGradeChance: # if same grade
+                newPersonId = gradeDict[currPerson.grade].pop(random.randrange(len(gradeDict[currPerson.grade])))
+                if newPersonId == currPerson.ident: # if picked the same person as current person, choose a new one
+                    newPersonId = gradeDict[currPerson.grade].pop(random.randrange(len(gradeDict[currPerson.grade])))
                 
                 try: # remove from infected list if we chose another infected person
-                    infList.remove(new_person_id)
+                    infList.remove(newPersonId)
 
-                temp_lg.append(new_person_id)
+                tempLg.append(newPersonId)
             else: # different grade
-                grades.remove(curr_person.ident)
+                grades.remove(currPerson.ident)
 
-                random_grade = grades[random.randrange(len(grades))]
-                new_person_id = gradedict[random_grade].pop(random.randrange(len(gradedict[random_grade])))
+                randomGrade = grades[random.randrange(len(grades))]
+                newPersonId = gradeDict[randomGrade].pop(random.randrange(len(gradeDict[randomGrade])))
 
                 try: # remove from infected list if we chose another infected person
-                    infList.remove(new_person_id)
+                    infList.remove(newPersonId)
 
-                grades.append(curr_person.ident)
+                grades.append(currPerson.ident)
         
-        lunch_groups.append(temp_lg)
+        lunchGroups.append(tempLg)
     
-    return lunch_groups
+    return lunchGroups
 
+def 
 
 
