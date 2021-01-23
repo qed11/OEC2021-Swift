@@ -4,7 +4,10 @@ from people import Person
 
 def getDic(filename:str):
     '''
+    Method that generate a dictionary of student, teacher and ta information to be accessed from the school record book
 
+    :param filename: pathway to the school record book 
+    :return dictionary: contained with information of student and using genreated identification number as keys
     '''
     #big dictionary holding all information
     person_class = dict()
@@ -104,7 +107,7 @@ def extra(el):
 
 if __name__=='__main__':
     p_class = getDic('OEC2021 - School Record Book .xlsx')
-    
+    '''
     print(p_class['S-566'].l_name)
     print(p_class['S-566'].f_name)
     print(p_class['S-566'].ident)
@@ -116,4 +119,4 @@ if __name__=='__main__':
     print(p_class['S-566'].p4)
     print(p_class['S-566'].health)    
     print(p_class['S-566'].grade)
-    
+    '''
