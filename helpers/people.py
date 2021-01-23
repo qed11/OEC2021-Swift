@@ -1,5 +1,5 @@
 '''
-File for people
+File for people definition
 '''
 
 class Person():
