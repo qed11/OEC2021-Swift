@@ -24,6 +24,16 @@ class Classroom:
         self.infectedList = []
         self.lastInfected = []
 
+def resetEnvRate(classrooms):
+    '''
+    Reset environment infection rate of all classrooms
+
+    :param classrooms: dictionary of classroom objects with keys corresponding to names
+    '''
+
+    for class_name in classrooms.keys():
+        classrooms[class_name].baseEnvRate = 0
+
 def updateClassrooms(classrooms, info_dict, period):
     '''
     Method for updating classroom information based on data

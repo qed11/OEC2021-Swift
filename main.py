@@ -1,5 +1,5 @@
 from helpers.infection import infectPeriod, infectTransition, lunchTransition, infectLunch, infectExcur
-from helpers.group import updateClassrooms
+from helpers.group import updateClassrooms, resetEnvRate
 from helpers.reader import getDic
 import copy
 import time
@@ -13,12 +13,13 @@ def main():
         if infoDict[student_id].infected:
             original_infect.append(student_id)
 
-    baseRate = 0.1
-    baseEnvRate = 0.001
+
+    baseRate = 0.08
+    baseEnvRate = 0.008
     periodCount = 5
     global_inf = 0
     global_R = 0
-    eps_count = 100
+    eps_count = 1000
 
     for _ in range(1, eps_count):
 
@@ -42,7 +43,7 @@ def main():
         updateClassrooms(classrooms, infoDict, 2)
         # Infect period 1-2 transition
         transitionInfect, transitionR = infectTransition(infoDict, classrooms, infectedList, baseRate/9)
-        average_R += (periodR + transitionR) / 2
+        average_R += periodR
 
         #print("Period infect {}: Transition Infect: {}".format(periodInfect, transitionInfect))
         #Delayed variable update to account for incubation period
@@ -54,7 +55,7 @@ def main():
         periodInfect, periodR = infectPeriod(infoDict, classrooms, infectedList, baseRate, baseEnvRate)
         # Infect period 2-lunch transition
         transitionInfect, transitionR = lunchTransition(infoDict, infectedList, baseRate/9)
-        average_R += (periodR + transitionR) / 2
+        average_R += periodR
 
         #print("To infect: {} Infected List: {}".format(toInfect, infectedList))
         infectedList.extend(toInfect)
@@ -67,7 +68,7 @@ def main():
         lunchInfect, lunchR = infectLunch(infoDict, infectedList, baseRate)
         # Infect lunch-period 3 transition
         transitionInfect, transitionR = lunchTransition(infoDict, infectedList, baseRate / 9)
-        average_R += (periodR + transitionR)/2
+        average_R += periodR
 
         infectedList.extend(toInfect)
         for student_id in toInfect:
@@ -76,12 +77,15 @@ def main():
         toInfect = lunchInfect
 
         updateClassrooms(classrooms, infoDict, 3)
+        # Reset env
+        resetEnvRate(classrooms)
+
         # Infect period 3
         periodInfect, periodR = infectPeriod(infoDict, classrooms, infectedList, baseRate, baseEnvRate)
         updateClassrooms(classrooms, infoDict, 4)
         # Infect period 3-4 transition
         transitionInfect, transitionR = infectTransition(infoDict, classrooms, infectedList, baseRate / 9)
-        average_R += (periodR + transitionR) / 2
+        average_R += periodR
 
         infectedList.extend(toInfect)
         for student_id in toInfect:
