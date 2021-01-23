@@ -1,5 +1,5 @@
 '''Utility functions'''
-from reader import getDic
+
 def getSiblingDict(person_class:dict):
     sib = dict()
     for el in person_class:
@@ -17,9 +17,21 @@ def getSiblingDict(person_class:dict):
 def infectSiblings(infoDict,infectedList,baseRate):
     
     siblingDict = getSiblingDict(infoDict)
-    
 
-if __name__=='__main__':
-    l = getDic('OEC2021 - School Record Book .xlsx')
-    siblingDict = getSiblingDict(l)
-    print(siblingDict)
+     # iterate through all extracurricular groups
+    for excurName, peopleList in siblingDict:
+        for infected_id in peopleList:
+            # find infected people in each group
+            if infected_id in infectedList:
+                for student in peopleList:
+                    # infect non infected people based on chance
+                    if student not in infectedList:
+                        randomSample = np.random.random()
+                        infectProb = augmentProb(baseRate, infoDict[student])
+                        if randomSample < infectProb:
+                            toInfect.add(student)
+    
+    toInfect = list(toInfect)
+    newlyInfected += len(toInfect)
+    
+    return toInfect, newlyInfected/len(infectedList)
