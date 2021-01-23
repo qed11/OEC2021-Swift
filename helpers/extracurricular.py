@@ -10,11 +10,12 @@ def getExcurDict(infoDict):
     '''
     excurDict = {}
     for ident, person in infoDict:
-        try:
-            excurDict[person.excur[0]].append(ident)
-        
-        except KeyError:
-            excurDict[person.excur[0]] = [ident]
+        if person.excur:
+            try:
+                excurDict[person.excur[0]].append(ident)
+            
+            except KeyError:
+                excurDict[person.excur[0]] = [ident]
     
     return excurDict
 
