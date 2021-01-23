@@ -1,4 +1,4 @@
-from helpers.infection import infectPeriod, infectTransition
+from helpers.infection import infectPeriod, infectTransition, lunchTransition
 from helpers.group import updateClassrooms
 
 def main():
@@ -25,21 +25,25 @@ def main():
 
     updateClassrooms(classrooms, infoDict, 2)
     periodInfect, periodR = infectPeriod(infoDict, classrooms, infectedList, baseRate, baseEnvRate)
-    average_R += periodR
+    transitionInfect, transitionR = lunchTransition(infoDict, classrooms, infectedList, baseRate/9)
+    average_R += (periodR + transitionR) / 2
     # No transition after period 2
 
     infectedList.extend(toInfect)
     for student_id in toInfect:
         infoDict[student_id].infected = True
-    toInfect = periodInfect
+    toInfect = periodInfect.extend(transitionInfect)
 
     #ToDo LUNCH
 
     infectedList.extend(toInfect)
     for student_id in toInfect:
         infoDict[student_id].infected = True
-    #ToDo: Include average_R update with lunch
-    #ToDo: Update toInfect with lunch group
+
+    transitionInfect, transitionR = lunchTransition(infoDict, classrooms, infectedList, baseRate / 9)
+    #ToDo: Include average_R update with lunch (+transitionR)/2
+    #ToDo: Update toInfect with lunch group - add transitionInfect
+
 
     updateClassrooms(classrooms, infoDict, 3)
     periodInfect, periodR = infectPeriod(infoDict, classrooms, infectedList, baseRate, baseEnvRate)
