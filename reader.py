@@ -26,7 +26,7 @@ def getDic(filename:str):
         #creating individual element
         for j in inf:
             if j[0] == i[0] and j[1] == i[1] and j[2] == i[2]:
-                person_dict['infected'] = 1
+                person_dict['infected'] = True
         person_dict['l_name'] = i[1]
         person_dict['f_name'] = i[2]
         person_dict['grade'] = int(i[3])
@@ -50,13 +50,12 @@ def getDic(filename:str):
         key = 'T-'+str(i[0])
         for j in inf:
             if j[0] == i[0] and j[1] == i[1] and j[2] == i[2]:
-                person_dict['infected'] = 1
+                person_dict['infected'] = True
         person_dict['l_name'] = i[1]
         person_dict['f_name'] = i[2]
         person_dict['p1'] = i[3]
         person_dict['ident'] = key
         person = Person.from_dict(person_dict)
-        print(key)
         person_class[key] = person
     
     #TAs
@@ -70,7 +69,7 @@ def getDic(filename:str):
         key = 'TA-'+str(i[0])
         for j in inf:
             if j[0] == i[0] and j[1] == i[1] and j[2] == i[2]:
-                person_dict['infected'] = 1
+                person_dict['infected'] = True
         person_dict['l_name'] = i[1]
         person_dict['f_name'] = i[2]
         person_dict['p1'] = i[3]
@@ -79,7 +78,6 @@ def getDic(filename:str):
         person_dict['p4'] = i[6]
         person_dict['ident'] = key
         person = Person.from_dict(person_dict)
-        print(key)
         person_class[key] = person
 
     return person_class
@@ -98,3 +96,16 @@ def extra(el):
 
 if __name__=='__main__':
     p_class = getDic('OEC2021 - School Record Book .xlsx')
+    '''
+    print(p_class['S-86'].l_name)
+    print(p_class['S-86'].f_name)
+    print(p_class['S-86'].ident)
+    print(p_class['S-86'].infected)
+    print(p_class['S-86'].excur)
+    print(p_class['S-86'].p1)
+    print(p_class['S-86'].p2)
+    print(p_class['S-86'].p3)
+    print(p_class['S-86'].p4)
+    print(p_class['S-86'].health)    
+    print(p_class['S-86'].grade)
+    '''
