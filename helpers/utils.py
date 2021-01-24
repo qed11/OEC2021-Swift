@@ -88,6 +88,11 @@ def generateLunchgroups(infoDict, infectedList, groupSize=10, currGradeChance=0.
     return lunchGroups
 
 def getSiblingDict(person_class:dict):
+    '''
+    Method of extracting a dictionary contained with people with same last names (assuming siblings)
+    :param person_class: main dictionary that stored all information of school personnels 
+    :return dictionary: list of sibling information with last name being keys and elements are lists of indentifiers
+    '''
     sib = dict()
     for el in person_class:
         if person_class[el].l_name not in sib:

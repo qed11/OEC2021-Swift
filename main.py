@@ -14,8 +14,8 @@ def main():
             original_infect.append(student_id)
 
 
-    baseRate = 0.08
-    baseEnvRate = 0.008
+    baseRate = 0.095
+    baseEnvRate = 0.01
     periodCount = 5
     global_inf = 0
     global_R = 0
