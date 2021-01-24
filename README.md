@@ -12,9 +12,12 @@ Instructions:
 open terminal in the top level directory 
 
 requirements: 
+
 install python
+```
 pip install -r requirements.txt
-
+```
 running instructions:
+```
 python main.py
-
+```
