@@ -2,6 +2,8 @@ from helpers.infection import infectPeriod, infectTransition, lunchTransition, i
 from helpers.group import updateClassrooms, resetEnvRate
 from helpers.reader import getDic
 import copy
+import numpy as np
+import csv
 import time
 
 def main():
@@ -13,15 +15,18 @@ def main():
         if infoDict[student_id].infected:
             original_infect.append(student_id)
 
+    infectionDict = {}
+    for student_id in infoDict.keys():
+        infectionDict[student_id] = 0
 
-    baseRate = 0.08
-    baseEnvRate = 0.008
+    baseRate = 0.095
+    baseEnvRate = 0.01
     periodCount = 5
     global_inf = 0
     global_R = 0
-    eps_count = 1000
+    eps_count = 5000
 
-    for _ in range(1, eps_count):
+    for _ in range(1, eps_count+1):
 
         infectedList = []
         infoDict = copy.deepcopy(backupDic)
@@ -104,7 +109,7 @@ def main():
         toInfect = periodInfect
 
         excurInfect, excurR = infectExcur(infoDict, infectedList, baseRate)
-        average_R += excurR
+        #average_R += excurR
 
         infectedList.extend(toInfect)
         for student_id in toInfect:
@@ -112,7 +117,7 @@ def main():
         toInfect = excurInfect
 
         siblingInfect, siblingR = infectSiblings(infoDict, infectedList, baseRate)
-        average_R += siblingR
+        #average_R += siblingR
 
         toInfect += siblingInfect
 
@@ -126,9 +131,31 @@ def main():
         infected_count = len(infectedList)
         global_R += average_R
         global_inf += infected_count
+        for student_id in infectionDict.keys():
+            if infoDict[student_id].infected:
+                infectionDict[student_id] += 1
 
+    #print("Infection dict: {}".format(infectionDict))
     print("Multi sample R: {}".format(global_R/eps_count))
     print("Multi sample infection average: {}".format(global_inf/eps_count))
+    idList = []
+    infectionList = []
+    for student_id in infectionDict.keys():
+        idList.append(student_id)
+        infectionList.append(infectionDict[student_id])
+    idx_list = np.argsort(infectionList)[::-1]
+    #print("Highest probability of infection")
+    with open('infection_probability.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(["Rankings", "Student ID", "Likelihood of Infection"])
+        for i, idx in enumerate(idx_list):
+            writer.writerow([i+1, idList[idx], infectionList[idx]/eps_count])
+        '''
+        print("{}. Student {}, Infection Chance {}".format(i+1, idList[idx],
+                                                           round(100*infectionList[idx]/eps_count, 4)))
+        '''
+
+
 
 if __name__ == '__main__':
     main()
