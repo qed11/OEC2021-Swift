@@ -207,6 +207,16 @@ def augmentProb(baseRate, student):
     return augRate
 
 def infectSiblings(infoDict,infectedList,baseRate):
+    '''
+    Method that returns a list of infected students from sibling infections
+
+    :param infoDict: Dictionary with student ids as keys, and Person class as associated values
+    :param infectedList: List of student ids pertaining to known infectious students
+    :param baseRate: Base rate at which an infected individual will infect others
+
+    :return list: List of student ids that represent students newly infected this period
+    :return int: Total number of newly infected individuals over total number of infected individuals at period start
+    '''
     
     siblingDict = getSiblingDict(infoDict)
     toInfect = set()
