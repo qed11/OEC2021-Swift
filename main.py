@@ -26,7 +26,7 @@ def main():
     global_R = 0
     eps_count = 5000
 
-    for _ in range(1, eps_count+1):
+    for eps in range(1, eps_count+1):
 
         infectedList = []
         infoDict = copy.deepcopy(backupDic)
@@ -135,6 +135,21 @@ def main():
             if infoDict[student_id].infected:
                 infectionDict[student_id] += 1
 
+        if (eps+1) % 10 == 0:
+            idList = []
+            infectionList = []
+            for student_id in infectionDict.keys():
+                idList.append(student_id)
+                infectionList.append(infectionDict[student_id])
+            idx_list = np.argsort(infectionList)[::-1]
+            print("Highest probability of infection, Iteration: {}".format(eps+1))
+            for i, idx in enumerate(idx_list):
+                print("{}. Student {}, Infection Chance {:.2f}".format(i + 1, idList[idx], 100 * infectionList[idx] / eps))
+                if i == 50:
+                    break
+
+            time.sleep(0.5)
+
     #print("Infection dict: {}".format(infectionDict))
     print("Multi sample R: {}".format(global_R/eps_count))
     print("Multi sample infection average: {}".format(global_inf/eps_count))
@@ -144,16 +159,15 @@ def main():
         idList.append(student_id)
         infectionList.append(infectionDict[student_id])
     idx_list = np.argsort(infectionList)[::-1]
-    #print("Highest probability of infection")
+
+    '''
     with open('infection_probability.csv', 'w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(["Rankings", "Student ID", "Likelihood of Infection"])
         for i, idx in enumerate(idx_list):
             writer.writerow([i+1, idList[idx], infectionList[idx]/eps_count])
-        '''
-        print("{}. Student {}, Infection Chance {}".format(i+1, idList[idx],
-                                                           round(100*infectionList[idx]/eps_count, 4)))
-        '''
+    '''
+
 
 
 
